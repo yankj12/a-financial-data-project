@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定dao -->
+<mapper namespace="com.yan.finance.fund.mapper.FincFundInfoItemMapper">
+
+	<insert id="insertFincFundInfoItem" parameterType="com.yan.finance.fund.schema.FincFundInfoItem">
+    	insert into finc_fund_info_item 
+    	(fund_code, trade_date, valuation_time, valuation, change_rate_month, change_rate_year, insert_time, update_time) 
+    	values 
+    	(#{fundCode}, #{tradeDate}, #{valuationTime}, #{valuation}, #{changeRateMonth}, #{changeRateYear}, #{insertTime}, #{updateTime})
+    </insert>
+    
+    <select id="findFincFundInfoItemByPK" parameterType="com.yan.finance.fund.schema.FincFundInfoItem" resultType="com.yan.finance.fund.schema.FincFundInfoItem">
+        SELECT * FROM finc_fund_info_item 
+        WHERE 
+        	fund_code = #{fundCode}
+        	and trade_date = #{tradeDate}
+        	and valuation_time = #{valuationTime}
+    </select>
+ 
+</mapper>
