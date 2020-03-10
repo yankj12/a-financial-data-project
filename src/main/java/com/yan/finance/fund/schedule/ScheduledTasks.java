@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.yan.finance.fund.mapper.FincEMFundValuationMapper;
 import com.yan.finance.fund.mapper.FincFundInfoItemMapper;
+import com.yan.finance.fund.schema.FincEMFundValuation;
 import com.yan.finance.fund.schema.FincFundInfoItem;
 import com.yan.finance.fund.spider.service.impl.FundSpiderEastMoneyService;
 
@@ -21,6 +23,9 @@ public class ScheduledTasks {
 	public FincFundInfoItemMapper fincFundInfoItemMapper;
 	
 	@Autowired
+	public FincEMFundValuationMapper fincEMFundValuationMapper;
+	
+	@Autowired
 	public FundSpiderEastMoneyService fundSpiderEastMoneyService;
 	
 	@Scheduled(initialDelayString = "20000", fixedDelayString = "60000")    //定时器将在1秒后每隔20秒执行
@@ -31,18 +36,18 @@ public class ScheduledTasks {
 		String webRootUrl = "http://fund.eastmoney.com";
 		String fundCode = "006087";
 		
-		FincFundInfoItem fincFundInfoItem = fundSpiderEastMoneyService.crawlFound(webRootUrl, fundCode);
+		FincEMFundValuation fincEMFundValuation = fundSpiderEastMoneyService.crawlFoundValuationFromJson(webRootUrl, fundCode);
+		System.out.println(fincEMFundValuation.getGsz());
 		
-		FincFundInfoItem fundInfoItemTmp = fincFundInfoItemMapper.findFincFundInfoItemByPK(fincFundInfoItem);
-		
-		if(fundInfoItemTmp == null) {
-			fincFundInfoItem.setInsertTime(new Date());
-			fincFundInfoItem.setUpdateTime(new Date());
+		FincEMFundValuation fincEMFundValuationTmp = fincEMFundValuationMapper.findFincEMFundValuationByPK(fincEMFundValuation);
+		if(fincEMFundValuationTmp == null) {
+			fincEMFundValuation.setInsertTime(new Date());
+			fincEMFundValuation.setUpdateTime(new Date());
 			
-			fincFundInfoItemMapper.insertFincFundInfoItem(fincFundInfoItem);
-			logger.info("fundValuationTask insert FincFundInfoItem.");
+			fincEMFundValuationMapper.insertFincEMFundValuation(fincEMFundValuation);
+			logger.info("fundValuationTask insert fincEMFundValuation.");
 		}else {
-			logger.info("fundValuationTask FincFundInfoItem exists.");
+			logger.info("fundValuationTask fincEMFundValuation exists.");
 		}
 		
 		logger.info("fundValuationTask end");
