@@ -1,4 +1,4 @@
-package com.yan.finance.fund.spider.service.impl;
+package com.yan.finance.fund.ods.spider.service.impl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -27,16 +27,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.yan.finance.fund.schema.FincEMFundValuation;
-import com.yan.finance.fund.schema.FincFundInfoItem;
+import com.yan.finance.fund.ods.schema.FincOdsEMFundValuation;
+import com.yan.finance.fund.ods.schema.FincOdsFundInfoItem;
 
 @Service
-public class FundSpiderEastMoneyService{
+public class FundSpiderSinaService{
 	
-	private static final Logger logger = LoggerFactory.getLogger(FundSpiderEastMoneyService.class);
+	private static final Logger logger = LoggerFactory.getLogger(FundSpiderSinaService.class);
 	
-	public FincFundInfoItem crawlFound(String webRootUrl, String fundCode){
-		FincFundInfoItem fincFundInfoItem = new FincFundInfoItem();
+	public FincOdsFundInfoItem crawlFound(String webRootUrl, String fundCode){
+		FincOdsFundInfoItem fincFundInfoItem = new FincOdsFundInfoItem();
 		fincFundInfoItem.setFundCode(fundCode);
 		
 		String fundUrl = webRootUrl + "/" + fundCode + ".html";
@@ -98,7 +98,7 @@ public class FundSpiderEastMoneyService{
 		return fincFundInfoItem;
 	}
 	
-	public FincEMFundValuation crawlFoundValuationFromJson(String webRootUrl, String fundCode){
+	public FincOdsEMFundValuation crawlFoundValuationFromJson(String webRootUrl, String fundCode){
 
 		Long rt = System.currentTimeMillis();
 		//http://fundgz.1234567.com.cn/js/006087.js?rt=1583289676821
@@ -108,7 +108,7 @@ public class FundSpiderEastMoneyService{
 		String content = this.requestUrlByGetMethod(fundUrl);
 		String jsonString = this.findJsonByRegex(content);
 		logger.info(jsonString);
-		FincEMFundValuation fincEMFundValuation = this.parseFundInfoItem(jsonString);
+		FincOdsEMFundValuation fincEMFundValuation = this.parseFundInfoItem(jsonString);
 		
 		return fincEMFundValuation;
 	}
@@ -223,36 +223,43 @@ public class FundSpiderEastMoneyService{
 		return numStr;
 	}
 	
-	public FincEMFundValuation parseFundInfoItem(String json) {
-		FincEMFundValuation fundValuation = new FincEMFundValuation();
+	public FincOdsEMFundValuation parseFundInfoItem(String json) {
+		FincOdsEMFundValuation fundValuation = null;
 		
-		//{"fundcode":"006087","name":"华泰柏瑞中证500ETF联接C","jzrq":"2020-03-05","dwjz":"0.6428","gsz":"0.6389","gszzl":"-0.61","gztime":"2020-03-06 15:00"}
-		JSONObject jsonObject = JSONObject.parseObject(json);
-		String fundcode = jsonObject.getString("fundcode");
-		fundValuation.setFundcode(fundcode);
-		
-		String name = jsonObject.getString("name");
-		fundValuation.setName(name);;
-		
-		//净值日期
-		String jzrq = jsonObject.getString("jzrq");
-		fundValuation.setJzrq(jzrq);
-		
-		// 单位净值
-		BigDecimal dwjz = jsonObject.getBigDecimal("dwjz");
-		fundValuation.setDwjz(dwjz);
-		
-		// 估算值
-		BigDecimal gsz = jsonObject.getBigDecimal("gsz");
-		fundValuation.setGsz(gsz);
-		
-		// 估算日增长率
-		BigDecimal gszzl = jsonObject.getBigDecimal("gszzl");
-		fundValuation.setGszzl(gszzl);
-		
-		// 估算时间
-		String gztime = jsonObject.getString("gztime");
-		fundValuation.setGztime(gztime);
+		try {
+			fundValuation = new FincOdsEMFundValuation();
+			//{"fundcode":"006087","name":"华泰柏瑞中证500ETF联接C","jzrq":"2020-03-05","dwjz":"0.6428","gsz":"0.6389","gszzl":"-0.61","gztime":"2020-03-06 15:00"}
+			JSONObject jsonObject = JSONObject.parseObject(json);
+			String fundcode = jsonObject.getString("fundcode");
+			fundValuation.setFundcode(fundcode);
+			
+			String name = jsonObject.getString("name");
+			fundValuation.setName(name);;
+			
+			//净值日期
+			String jzrq = jsonObject.getString("jzrq");
+			fundValuation.setJzrq(jzrq);
+			
+			// 单位净值
+			BigDecimal dwjz = jsonObject.getBigDecimal("dwjz");
+			fundValuation.setDwjz(dwjz);
+			
+			// 估算值
+			BigDecimal gsz = jsonObject.getBigDecimal("gsz");
+			fundValuation.setGsz(gsz);
+			
+			// 估算日增长率
+			BigDecimal gszzl = jsonObject.getBigDecimal("gszzl");
+			fundValuation.setGszzl(gszzl);
+			
+			// 估算时间
+			String gztime = jsonObject.getString("gztime");
+			fundValuation.setGztime(gztime);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fundValuation = null;
+		}
 		
 		return fundValuation;
 	}

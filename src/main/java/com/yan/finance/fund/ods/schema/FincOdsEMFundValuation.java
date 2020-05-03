@@ -1,4 +1,4 @@
-package com.yan.finance.fund.schema;
+package com.yan.finance.fund.ods.schema;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class FincEMFundValuation{
+public class FincOdsEMFundValuation{
 
 	public String fundcode;
 	

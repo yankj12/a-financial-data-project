@@ -1,6 +1,6 @@
-package com.yan.finance.fund.spider.main;
+package com.yan.finance.fund.ods.spider.main;
 
-import com.yan.finance.fund.spider.service.impl.FundSpiderEastMoneyService;
+import com.yan.finance.fund.ods.spider.service.impl.FundSpiderEastMoneyService;
 
 public class FundMain {
 

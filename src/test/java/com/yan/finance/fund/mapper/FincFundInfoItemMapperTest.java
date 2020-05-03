@@ -10,18 +10,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.yan.finance.FinanceApplication;
-import com.yan.finance.fund.schema.FincFundInfoItem;
+import com.yan.finance.fund.ods.mapper.FincOdsFundInfoItemMapper;
+import com.yan.finance.fund.ods.schema.FincOdsFundInfoItem;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = { FinanceApplication.class })
 public class FincFundInfoItemMapperTest {
 
 	@Autowired
-	public FincFundInfoItemMapper fincFundInfoItemMapper;
+	public FincOdsFundInfoItemMapper fincFundInfoItemMapper;
 	
 	@Test
 	public void testInsertFincFundInfoItem() {
-		FincFundInfoItem fincFundInfoItem = new FincFundInfoItem();
+		FincOdsFundInfoItem fincFundInfoItem = new FincOdsFundInfoItem();
 		fincFundInfoItem.setFundCode("006087");
 		fincFundInfoItem.setTradeDate("2020-03-02");
 		fincFundInfoItem.setValuationTime("2020-03-02 15:00");
@@ -35,7 +36,7 @@ public class FincFundInfoItemMapperTest {
 
 	@Test
 	public void testFindFincFundInfoItemByPK() {
-		FincFundInfoItem fincFundInfoItem = new FincFundInfoItem();
+		FincOdsFundInfoItem fincFundInfoItem = new FincOdsFundInfoItem();
 		fincFundInfoItem.setFundCode("006087");
 		fincFundInfoItem.setTradeDate("2020-03-02");
 		fincFundInfoItem.setValuationTime("2020-03-02 15:00");

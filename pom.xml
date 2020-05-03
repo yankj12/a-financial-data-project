@@ -89,6 +89,11 @@
 	    <artifactId>fastjson</artifactId>
 	    <version>1.2.62</version>
 	</dependency>	
+	<dependency>
+	    <groupId>org.dom4j</groupId>
+	    <artifactId>dom4j</artifactId>
+	    <version>2.1.1</version>
+	</dependency>
       <dependency>
           <groupId>org.projectlombok</groupId>
           <artifactId>lombok</artifactId>

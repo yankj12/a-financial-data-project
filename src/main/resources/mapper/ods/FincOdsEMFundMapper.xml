@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定dao -->
+<mapper namespace="com.yan.finance.fund.ods.mapper.FincOdsEMFundMapper">
+
+	<insert id="insertFincEMFund" parameterType="com.yan.finance.fund.ods.schema.FincOdsEMFund">
+    	insert into finc_ods_em_fund 
+    	(fundcode, name, insert_time, update_time) 
+    	values 
+    	(#{fundcode}, #{name}, #{insertTime}, #{updateTime})
+    </insert>
+    
+    <select id="findFincEMFundByPK" parameterType="com.yan.finance.fund.ods.schema.FincOdsEMFund" resultType="com.yan.finance.fund.ods.schema.FincOdsEMFund">
+        SELECT * FROM finc_ods_em_fund 
+        WHERE fundcode = #{fundcode}
+    </select>
+    
+    <select id="findFincEMFunds" parameterType="com.yan.finance.fund.ods.schema.FincOdsEMFund" resultType="com.yan.finance.fund.ods.schema.FincOdsEMFund">
+        SELECT * FROM finc_ods_em_fund
+    </select>
+ 
+</mapper>

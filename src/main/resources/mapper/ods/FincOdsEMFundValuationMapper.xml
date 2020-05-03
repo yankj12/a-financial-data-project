@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!-- 指定dao -->
-<mapper namespace="com.yan.finance.fund.mapper.FincEMFundValuationMapper">
+<mapper namespace="com.yan.finance.fund.ods.mapper.FincOdsEMFundValuationMapper">
 
-	<insert id="insertFincEMFundValuation" parameterType="com.yan.finance.fund.schema.FincEMFundValuation">
-    	insert into finc_em_fund_valuation 
+	<insert id="insertFincEMFundValuation" parameterType="com.yan.finance.fund.ods.schema.FincOdsEMFundValuation">
+    	insert into finc_ods_em_fund_valuation 
     	(fundcode, name, jzrq, gztime, dwjz, gsz, gszzl, insert_time, update_time) 
     	values 
     	(#{fundcode}, #{name}, #{jzrq}, #{gztime}, #{dwjz}, #{gsz}, #{gszzl}, #{insertTime}, #{updateTime})
     </insert>
     
-    <select id="findFincEMFundValuationByPK" parameterType="com.yan.finance.fund.schema.FincEMFundValuation" resultType="com.yan.finance.fund.schema.FincEMFundValuation">
-        SELECT * FROM finc_em_fund_valuation 
+    <select id="findFincEMFundValuationByPK" parameterType="com.yan.finance.fund.ods.schema.FincOdsEMFundValuation" resultType="com.yan.finance.fund.ods.schema.FincOdsEMFundValuation">
+        SELECT * FROM finc_ods_em_fund_valuation 
         WHERE 
         	fundcode = #{fundcode}
         	and gztime = #{gztime}

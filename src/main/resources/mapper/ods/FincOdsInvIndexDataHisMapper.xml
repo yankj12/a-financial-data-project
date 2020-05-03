@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 指定dao -->
+<mapper namespace="com.yan.finance.fund.ods.mapper.FincOdsInvIndexDataHisMapper">
+
+	<insert id="insertFincInvIndexDataHis" parameterType="com.yan.finance.fund.ods.schema.FincOdsInvIndexDataHis">
+    	insert into finc_ods_inv_index_data_his 
+    	(index_code, trade_date, type, name, curr_id, closing_price, highest_price, lowest_price, opening_price, change_amount, change_rate, total_volume, insertTime, updateTime) 
+    	values 
+    	(#{indexCode}, #{tradeDate}, #{type}, #{name}, #{currId}, #{closingPrice}, #{highestPrice}, #{lowestPrice}, #{openingPrice}, #{changeAmount}, #{changeRate}, #{totalVolume}, #{insertTime}, #{updateTime})
+    </insert>
+    
+    <insert id="insertBatchFincInvIndexDataHis" parameterType="java.util.List">
+    	insert into finc_ods_inv_index_data_his
+    	(index_code, trade_date, type, name, curr_id, closing_price, highest_price, lowest_price, opening_price, change_amount, change_rate, total_volume, insertTime, updateTime) 
+    	values 
+    	<foreach collection="list" item="item" index="index" separator=",">
+            (#{item.indexCode}, #{item.tradeDate}, #{item.type}, #{item.name}, #{item.currId}, #{item.closingPrice}, #{item.highestPrice}, #{item.lowestPrice}, #{item.openingPrice}, #{item.changeAmount}, #{item.changeRate}, #{item.totalVolume}, #{item.insertTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+    
+    <select id="findFincInvIndexDataHisByPK" parameterType="String" resultType="com.yan.finance.fund.ods.schema.FincOdsInvIndexDataHis">
+        SELECT * FROM finc_ods_inv_index_data_his WHERE curr_id=#{currId} and trade_date = #{tradeDate} 
+    </select>
+    
+	<select id="countFincInvIndexDataHisByCurrIdAndDateRange" parameterType="String" resultType="long">
+        SELECT count(*) FROM finc_ods_inv_index_data_his
+    	<trim prefix="where" prefixOverrides="and|or"> 
+    		<if test="currId != null and currId != ''">
+    			curr_id=#{currId}
+    		</if>
+    		<if test="startDate != null and startDate != ''">
+    			and trade_date &gt;= #{startDate}
+    		</if>
+    		<if test="endDate != null and endDate != ''">
+    			and trade_date &lt;= #{endDate}
+    		</if>
+    	</trim>
+    </select>
+    
+    <select id="findFincInvIndexDataHisByCurrIdAndDateRange" parameterType="java.util.Map"  resultType="com.yan.finance.fund.ods.schema.FincOdsInvIndexDataHis">
+    	select * from finc_ods_inv_index_data_his
+    	<trim prefix="where" prefixOverrides="and|or"> 
+    		<if test="currId != null and currId != ''">
+    			curr_id=#{currId}
+    		</if>
+    		<if test="startDate != null and startDate != ''">
+    			and trade_date &gt;= #{startDate}
+    		</if>
+    		<if test="endDate != null and endDate != ''">
+    			and trade_date &lt;= #{endDate}
+    		</if>
+    	</trim>
+    	order by trade_date desc
+    	limit #{offset},#{pageSize}
+    </select>
+  
+    <delete id="deleteBatchFincInvIndexDataHisByPK" parameterType="java.util.List">
+    	delete from finc_ods_inv_index_data_his
+    	where 
+		<foreach collection="list" item="item" index="index" separator="or">
+            ( index_code=#{item.indexCode} and trade_date=#{item.tradeDate} ) 
+        </foreach>
+    </delete>
+
+    <delete id="deleteFincInvIndexDataHisByPK" parameterType="com.yan.finance.fund.ods.schema.FincOdsInvIndexDataHis">
+    	delete from finc_ods_inv_index_data_his
+    	where index_code=#{indexCode} and trade_date=#{tradeDate}
+    </delete>
+        
+    <delete id="deleteFincInvIndexDataHisByCurrIdAndDateRange" parameterType="java.util.Map">
+    	delete from finc_ods_inv_index_data_his
+    		where curr_id=#{currId} 
+    		and trade_date &gt;= #{startDate}
+    		and trade_date &lt;= #{endDate}
+    </delete>
+</mapper>

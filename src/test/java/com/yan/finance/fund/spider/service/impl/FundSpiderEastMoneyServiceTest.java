@@ -8,9 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.yan.finance.FinanceApplication;
-import com.yan.finance.fund.mapper.FincEMFundValuationMapper;
-import com.yan.finance.fund.schema.FincEMFundValuation;
-import com.yan.finance.fund.schema.FincFundInfoItem;
+import com.yan.finance.fund.ods.mapper.FincOdsEMFundValuationMapper;
+import com.yan.finance.fund.ods.schema.FincOdsEMFundValuation;
+import com.yan.finance.fund.ods.schema.FincOdsFundInfoItem;
+import com.yan.finance.fund.ods.spider.service.impl.FundSpiderEastMoneyService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = { FinanceApplication.class })
@@ -20,7 +21,7 @@ public class FundSpiderEastMoneyServiceTest {
 	public FundSpiderEastMoneyService fundSpiderEastMoneyService;
 	
 	@Autowired
-	public FincEMFundValuationMapper fincEMFundValuationMapper;
+	public FincOdsEMFundValuationMapper fincEMFundValuationMapper;
 	
 	@Ignore
 	@Test
@@ -28,7 +29,7 @@ public class FundSpiderEastMoneyServiceTest {
 		String webRootUrl = "http://fund.eastmoney.com";
 		String fundCode = "006087";
 		
-		FincFundInfoItem fincFundInfoItem = fundSpiderEastMoneyService.crawlFound(webRootUrl, fundCode);
+		FincOdsFundInfoItem fincFundInfoItem = fundSpiderEastMoneyService.crawlFound(webRootUrl, fundCode);
 		System.out.println(fincFundInfoItem.getValuation());
 	}
 
@@ -37,7 +38,7 @@ public class FundSpiderEastMoneyServiceTest {
 		String webRootUrl = "http://fund.eastmoney.com";
 		String fundCode = "006087";
 		
-		FincEMFundValuation fincEMFundValuation = fundSpiderEastMoneyService.crawlFoundValuationFromJson(webRootUrl, fundCode);
+		FincOdsEMFundValuation fincEMFundValuation = fundSpiderEastMoneyService.crawlFoundValuationFromJson(webRootUrl, fundCode);
 		System.out.println(fincEMFundValuation.getGsz());
 		fincEMFundValuationMapper.insertFincEMFundValuation(fincEMFundValuation);
 	}

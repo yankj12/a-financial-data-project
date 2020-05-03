@@ -1,13 +1,12 @@
-package com.yan.finance.fund.schema;
+package com.yan.finance.fund.ods.schema;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
 
 @Data
-public class FincFundInfoItem implements Serializable{
+public class FincOdsFundInfoItem{
 
 	/**
 	 * 基金代码
