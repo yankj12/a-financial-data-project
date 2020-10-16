@@ -109,7 +109,7 @@ public class FundSpiderInvestingServiceTest {
 	}
 
 	
-	@Test
+	//@Test
 	public void testCrawlHistoricalData2() {
 //		String indexCode = "000300";
 //		String currId = "940801";
@@ -122,6 +122,42 @@ public class FundSpiderInvestingServiceTest {
 		String name = "上证指数";
 		String startDate = "2000/01/01";
 		String endDate = "2001/01/01";
+		
+		List<FincOdsInvIndexDataHis> fincInvIndexDataHisList = fundSpiderInvestingService.crawlHistoricalDataByShortDatePeriod(indexCode, currId, name, startDate, endDate);
+		
+		if(fincInvIndexDataHisList != null && fincInvIndexDataHisList.size() > 0) {
+			
+			for(FincOdsInvIndexDataHis InvIndexDataHis : fincInvIndexDataHisList) {
+				fincInvIndexDataHisMapper.deleteFincInvIndexDataHisByPK(InvIndexDataHis);
+				fincInvIndexDataHisMapper.insertFincInvIndexDataHis(InvIndexDataHis);
+			}
+		}
+	}
+	
+	
+	@Test
+	public void testCrawlHistoricalData3() {
+//		String indexCode = "000300";
+//		String currId = "940801";
+//		String name = "沪深300";
+//		String startDate = "2005/01/01";
+//		String endDate = "2020/04/20";
+		
+		//curr_id=29227&smlID=204958
+		String indexCode = null;
+//		String currId = "29227";
+//		String name = "中国10年期国债";
+		
+		//curr_id=29234&smlID=205035
+//		String currId = "29234";
+//		String name = "中国5年期国债";
+		
+		//curr_id=29233&smlID=205024
+		String currId = "29233";
+		String name = "中国3年期国债";
+		
+		String startDate = "2001/01/01";
+		String endDate = "2020/10/15";
 		
 		List<FincOdsInvIndexDataHis> fincInvIndexDataHisList = fundSpiderInvestingService.crawlHistoricalDataByShortDatePeriod(indexCode, currId, name, startDate, endDate);
 		

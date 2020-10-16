@@ -17,6 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -29,6 +31,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.yan.finance.fund.ods.schema.FincOdsInvIndexDataHis;
@@ -37,6 +40,21 @@ import com.yan.finance.fund.ods.schema.FincOdsInvIndexDataHis;
 public class FundSpiderInvestingService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(FundSpiderInvestingService.class);
+	
+	
+	// 是否使用代理
+	@Value("${proxy.useProxy}")
+	private String useProxy;
+	
+	@Value("${proxy.ip}")
+	private String proxyIp;
+	
+	@Value("${proxy.port}")
+	private int port;
+	
+	@Value("${proxy.protocol}")
+	private String proxyProtocol;
+	
 	
 	public List<FincOdsInvIndexDataHis> crawlHistoricalData(String indexCode, String currId, String name, String startDateStr, String endDateStr){
 		logger.debug("startDate={}, endDate={}", new Object[] {startDateStr, endDateStr});
@@ -221,8 +239,22 @@ public class FundSpiderInvestingService{
 	 */
 	public String requestUrlByPostMethod(String url, Map<String, String> requestHeaders, String body, String charset) {
 		CloseableHttpClient httpclient = null;
-    	// 不使用代理服务器
-    	httpclient = HttpClients.createDefault();
+
+		//实例化CloseableHttpClient对象
+        if("on".equalsIgnoreCase(useProxy)){
+        	// 使用代理服务器
+        	
+        	//设置代理IP、端口、协议（请分别替换）
+        	HttpHost proxy = new HttpHost(proxyIp, port, proxyProtocol);
+        	
+        	//把代理设置到请求配置
+        	RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
+        	httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+        }else{
+        	// 不使用代理服务器
+        	httpclient = HttpClients.createDefault();
+        }
+		
 		HttpPost httpPost = new HttpPost(url);
 
 		StringEntity requestEntity = new StringEntity(body, charset);
@@ -343,9 +375,10 @@ public class FundSpiderInvestingService{
 			endCalendar.setTime(endDate);
 
 			while(startCalendar.before(endCalendar)) {
+				
 				String sDate = sdf.format(startCalendar.getTime());
 				
-				startCalendar.add(Calendar.DATE, 30);
+				startCalendar.add(Calendar.DATE, 29);
 				
 				String eDate = sdf.format(startCalendar.getTime());
 				if(startCalendar.before(endCalendar) || startCalendar.equals(endCalendar)) {
@@ -358,6 +391,9 @@ public class FundSpiderInvestingService{
 				//System.out.println(startEndDateStr);
 				
 				startEndDateStrs.add(startEndDateStr);
+				
+				//起始日期加1天，避免日期段重叠
+				startCalendar.add(Calendar.DATE, 1);
 			}
 			
 		} catch (ParseException e) {

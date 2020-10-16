@@ -323,7 +323,7 @@ CREATE TABLE finc_ods_inv_index_data_his (
 	total_volume varchar(30) COMMENT '成交量',
 	insertTime datetime DEFAULT NULL,
 	updateTime datetime DEFAULT NULL,
- 	PRIMARY KEY (index_code, trade_date)
+ 	PRIMARY KEY (curr_id, trade_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE finc_select (
